@@ -25,7 +25,7 @@ jobs:
         echo '----'
         gh pr ready $url
         gh pr status --conflict-status --json mergeStateStatus,url,title,statusCheckRollup,mergeable,autoMergeRequest,potentialMergeCommit
-        gh pr checks $url --required --watch --json state
+        gh pr checks $url --required --watch
         gh pr merge $url --auto --merge
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
