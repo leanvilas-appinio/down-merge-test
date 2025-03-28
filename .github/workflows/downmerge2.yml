@@ -17,23 +17,3 @@ jobs:
       run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "Github Actions"
-    - name: Create pull request
-      run: |
-        git fetch --unshallow
-        git checkout ${{ env.MAIN_BRANCH }}
-        git pull
-        git checkout ${{ env.DEVELOP_BRANCH }}
-        git pull
-        git merge --no-ff ${{ env.MAIN_BRANCH }} -m "Auto-merge ${{ env.MAIN_BRANCH }} back to ${{ env.DEVELOP_BRANCH }}"
-        git push
-        url=$(gh pr create -B ${{ env.DEVELOP_BRANCH }} -H ${{ env.MAIN_BRANCH }} --title 'Merge ${{ env.MAIN_BRANCH }} into ${{ env.DEVELOP_BRANCH }}' --body 'Created by Github action')
-        gh pr merge $url --auto --merge
-      env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    # - name: Merge main back to dev
-    #   run: |
-    #       git fetch --unshallow
-    #       git checkout ${{ env.DEVELOP_BRANCH }}
-    #       git pull
-    #       git merge --no-ff ${{ env.MAIN_BRANCH }} -m "Auto-merge ${{ env.MAIN_BRANCH }} back to ${{ env.DEVELOP_BRANCH }}"
-    #       git push
