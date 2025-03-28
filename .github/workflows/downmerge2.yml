@@ -20,6 +20,9 @@ jobs:
     - name: Create pull request
       run: |
         url=$(gh pr create -B ${{ env.DEVELOP_BRANCH }} -H ${{ env.MAIN_BRANCH }} --title 'Merge ${{ env.MAIN_BRANCH }} into ${{ env.DEVELOP_BRANCH }}' --body 'Created by Github action')
+        echo '----'
+        echo $url
+        echo '----'
         gh pr ready $url
         gh pr status --conflict-status --json mergeStateStatus,url,title,statusCheckRollup,mergeable,autoMergeRequest,potentialMergeCommit
         gh pr checks $url --required --watch --json state
