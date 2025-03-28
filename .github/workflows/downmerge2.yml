@@ -9,7 +9,7 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 permissions:
-  contents: read
+  contents: write
   pull-requests: write
   statuses: write
 
@@ -39,9 +39,8 @@ jobs:
         id: "pr-status"
         run: |
           echo "$ PR Status"
-          echo "The url is $url"
-          echo "The url is ${{ steps.create-pr.outputs.url }}"
-          gh pr ready $url
+          gh pr ready ${{ steps.create-pr.outputs.url }}
+          
           status=$(gh pr status --json mergeable)
           if echo "$status" | grep -q "CONFLICTING"; then
             echo "The are conflicts that need to be solved manually"
@@ -52,9 +51,7 @@ jobs:
         id: "merge-pr"
         run: |
           echo "$ Attempting auto merge"
-          echo "The url is $url"
-          echo "The url is ${{ steps.create-pr.outputs.url }}"
-          gh pr merge $url --auto --merge
+          gh pr merge ${{ steps.create-pr.outputs.url }} --auto --merge
         
           echo "-----"
           echo "Done"
