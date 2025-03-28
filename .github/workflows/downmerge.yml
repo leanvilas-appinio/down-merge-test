@@ -8,10 +8,10 @@ on:
 jobs:
   downmerge:
     runs-on: ubuntu-latest
-    name: Downmerge
+    name: Down-Stream Version AutoMerger
     steps:
       - id: downmerge
-        uses: maikuru/downstream-version-automerge@v1
+        uses: maikuru/downstream-version-automerge@v1.1.2
         with:
           production-branch: 'main'
           development-branch: 'develop'
