@@ -1,0 +1,20 @@
+on:
+  push:
+    branches:
+      - main
+      - 'release/**'
+      - develop
+
+jobs:
+  downmerge:
+    runs-on: ubuntu-latest
+    name: Downmerge
+    steps:
+      - id: downmerge
+        uses: maikuru/downstream-version-automerge@v1
+        with:
+          production-branch: 'main'
+          development-branch: 'develop'
+          release-pattern: 'release/'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
