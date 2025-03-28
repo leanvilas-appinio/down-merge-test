@@ -6,6 +6,7 @@ on:
 env:
   MAIN_BRANCH: main
   DEVELOP_BRANCH: develop
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 permissions:
   contents: read # This is required for actions/checkout
@@ -54,5 +55,3 @@ jobs:
         
           echo "-----"
           echo "Done"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
