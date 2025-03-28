@@ -17,3 +17,41 @@ jobs:
       run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "Github Actions"
+    - name: Create pull request
+      run: |
+        echo "-----"
+        echo "$ Creating Merge PR"
+        url=$(gh pr create -B ${{ env.DEVELOP_BRANCH }} -H ${{ env.MAIN_BRANCH }} --title 'Merge ${{ env.MAIN_BRANCH }} into ${{ env.DEVELOP_BRANCH }}' --body 'Created by Github action')
+        echo "$ PR created: $url"
+        
+        echo "-----"
+        echo "$ PR Status"
+        gh pr ready $url
+        status=$(gh pr status --json mergeable)
+        if echo "$status" | grep -q "CONFLICTING"; then
+            echo "The are conflicts that need to be solved manually"
+            echo "Finishing with error"
+            exit 1
+        fi
+        
+        echo "-----"
+        echo "$ Wait for CI"
+        gh pr checks $url --watch
+        
+        echo "-----"
+        echo "$ Attempting auto merge"
+        gh pr merge $url --auto --merge
+        
+        echo "-----"
+        echo "Done"
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    # - name: Merge main back to dev
+    #   run: |
+        # git fetch --unshallow
+        # git checkout ${{ env.MAIN_BRANCH }}
+        # git pull
+        # git checkout ${{ env.DEVELOP_BRANCH }}
+        # git pull
+        # git merge --no-ff ${{ env.MAIN_BRANCH }} -m "Auto-merge ${{ env.MAIN_BRANCH }} back to ${{ env.DEVELOP_BRANCH }}"
+        # git push
