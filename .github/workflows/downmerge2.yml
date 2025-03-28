@@ -9,8 +9,9 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 permissions:
-  contents: read # This is required for actions/checkout
-  pull-requests: write # This is required to add the comments to the PR
+  contents: write
+  pull-requests: write
+  statuses: write
 
 jobs:
   down-merge:
@@ -51,6 +52,7 @@ jobs:
         id: "merge-pr"
         run: |
           echo "$ Attempting auto merge"
+          echo $url
           gh pr merge $url --auto --merge
         
           echo "-----"
