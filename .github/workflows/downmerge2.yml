@@ -19,14 +19,23 @@ jobs:
           git config --local user.name "Github Actions"
     - name: Create pull request
       run: |
+        echo "-----"
+        echo "Creating Merge PR"
         url=$(gh pr create -B ${{ env.DEVELOP_BRANCH }} -H ${{ env.MAIN_BRANCH }} --title 'Merge ${{ env.MAIN_BRANCH }} into ${{ env.DEVELOP_BRANCH }}' --body 'Created by Github action')
-        echo '----'
-        echo $url
-        echo '----'
+        echo "-----"
+        echo "PR created: $url"
+        echo "-----"
+        echo "PR Status"
         gh pr ready $url
-        gh pr status --conflict-status --json mergeStateStatus,url,title,statusCheckRollup,mergeable,autoMergeRequest,potentialMergeCommit
+        gh pr status --conflict-status --json mergeable
+        echo "-----"
+        echo "Wait for CI"
         gh pr checks $url --required --watch
+        echo "-----"
+        echo "Attempting auto merge"
         gh pr merge $url --auto --merge
+        echo "-----"
+        echo "Done"
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     # - name: Merge main back to dev
