@@ -1,16 +1,16 @@
 on:
   push:
     branches:
-      - main
+      # - main
       - 'release/**'
-      - develop
+      # - develop
 
 jobs:
   downmerge:
     runs-on: ubuntu-latest
-    name: Down-Stream Version AutoMerger
     steps:
       - id: downmerge
+        name: Down-Stream Version AutoMerger
         uses: maikuru/downstream-version-automerge@v1.1.2
         with:
           production-branch: 'main'
